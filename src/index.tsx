@@ -1,43 +1,31 @@
 import { serve } from "bun";
-import index from "./index.html";
+
+// React app and API 
+import app from "./app/index.html";
+import api from "./api/server"
+
+// SSR pages
 import homepage from "./pages/homepage.html"
+import notFound from "./pages/notFound.html"
 
 const server = serve({
   routes: {
-    // Serve index.html for all unmatched routes.
-    "/*": index,
-
-    // Add indexed pages we want SEO to crawl
+    // Serve SSR pages so they can be indexed and SEO friendly
     "/": homepage,
 
-    "/api/hello": {
-      async GET(req) {
-        return Response.json({
-          message: "Hello, world!",
-          method: "GET",
-        });
-      },
-      async PUT(req) {
-        return Response.json({
-          message: "Hello, world!",
-          method: "PUT",
-        });
-      },
-    },
+    // Serve the React App for any route starting with /app
+    "/app/*": app,
 
-    "/api/hello/:name": async req => {
-      const name = req.params.name;
-      return Response.json({
-        message: `Hello, ${name}!`,
-      });
-    },
+    // Single handler that delegates all API requests to Elysia
+    "/api/*": (req) => api.handle(req),
+
+    // Serve notFound page for all unmatched routes.
+    "/*": notFound,
   },
 
   development: process.env.NODE_ENV !== "production" && {
-    // Enable browser hot reloading in development
     hmr: true,
-
-    // Echo console logs from the browser to the server
     console: true,
   },
+  port: 3000,
 });

@@ -2,7 +2,7 @@ import { serve } from "bun";
 
 // React app and API 
 import app from "./app/index.html";
-import api from "./api/server"
+import api from "./api"
 
 // SSR pages
 import homepage from "./pages/homepage.html"
@@ -14,10 +14,15 @@ const server = serve({
     "/": homepage,
 
     // Serve the React App for any route starting with /app
+    "/app": app,
     "/app/*": app,
 
     // Single handler that delegates all API requests to Elysia
-    "/api/*": (req) => api.handle(req),
+    "/api": (req) => api.handle(req),
+    "/api/*": (req) => {
+      console.log("Incoming req:", req.url)
+      return api.handle(req)}
+      ,
 
     // Serve notFound page for all unmatched routes.
     "/*": notFound,

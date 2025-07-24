@@ -8,10 +8,16 @@ import api from "./api"
 import homepage from "./pages/homepage.html"
 import notFound from "./pages/notFound.html"
 
+// Auth pages
+import login from "./pages/auth/login.html"
+import signup from "./pages/auth/signup.html"
+
 const server = serve({
   routes: {
     // Serve SSR pages so they can be indexed and SEO friendly
     "/": homepage,
+    "/login": login,
+    "/signup": signup,
 
     // Serve the React App for any route starting with /app
     "/app": app,
@@ -32,5 +38,5 @@ const server = serve({
     hmr: true,
     console: true,
   },
-  port: 3000,
+  port: 6969,
 });

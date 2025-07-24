@@ -3,21 +3,37 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="../images/logo.svg" />
+    <link rel="icon" type="image/svg+xml" href="../public/images/logo.svg" />
     <title>My learning app</title>
     <link rel="stylesheet" href="../styles/index.css" />
+    <script 
+      src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.min.js" 
+      integrity="sha384-Akqfrbj/HpNVo8k11SXBb6TlBWmXXlYQrCSqEWmyKJe+hDm3Z/B2WVG4smwBkRVm" 
+      crossorigin="anonymous">
+    </script>
   </head>
   <body>
-    <div class="bg-brand-300 h-[240px] text-white p-4">
-      <h1 class="w-full text-center text-[24px]">My learning app</h1>
-    </div>
-    <div class="h-[240px] p-4">
-      <h1 class="w-full pt-4 text-[24px]">My learning app</h1>
-    </div>
-    <div class="bg-brand-300 h-[100px] text-white">
-      <p>Contact</p>
-      <p>About</p>
-      <p>T&Cs</p>
+    <nav class="bg-brand-300 h-[80px] text-white px-8 flex justify-between">
+      <a href="/" class="flex justify-center items-center">
+        <img src="../public/images/logo.svg" alt="logo" class="h-[50px] w-[50px] mr-4"/>
+        <p class="text-2xl">Giok / 기억</p>
+      </a>
+      <div class="flex items-center gap-8">
+        <button class="cursor-pointer">
+          <a href="/login">
+            Login
+          </a>
+        </button>
+        <button class="cursor-pointer bg-white text-black py-2 px-4 rounded-xl">
+          <a href="/signup">
+            Get started
+          </a>
+        </button>
+      </div>
+    </nav>
+
+    <div>
+      Page goes here
     </div>
   </body>
 </html>

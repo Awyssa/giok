@@ -13,22 +13,41 @@
 		></script>
 	</head>
 	<body>
-		<nav class="bg-brand-300 h-[80px] text-white px-8 flex justify-between">
-			<a href="/" class="flex justify-center items-center">
-				<img src="../../public/images/logo.svg" alt="logo" class="h-[50px] w-[50px] mr-4" />
-				<p class="text-2xl">Giok / 기억</p>
-			</a>
-		</nav>
-
 		<div class="flex">
-			<div class="flex justify-center items-center w-[50%]">
-				<div>
-					<h1>Sign up today!</h1>
+			<div class="w-[60%]">
+				<div class="flex items-center h-[80px] px-8">
+					<a href="/">
+						<img src="../../public/images/logo.svg" alt="logo" class="h-[50px] w-[50px] mr-4" />
+					</a>
+					<p class="text-2xl">Giok / 기억</p>
+				</div>
+				<div class="h-[calc(100vh-80px)] flex flex-col items-center justify-center w-full">
+					<h1 class="text-2xl mb-4">Start your own Giok!</h1>
+					<form class="flex flex-col gap-4 w-[40%]">
+						<div class="flex flex-col gap-1">
+							<label>Name:</label>
+							<input type="text" class="bg-blue-300 rounded-md h-[26px] py-1 px-2" />
+						</div>
+						<div class="flex flex-col">
+							<label>Email:</label>
+							<input type="email" class="bg-blue-300 rounded-md h-[26px] py-1 px-2" />
+						</div>
+						<div class="flex flex-col">
+							<label>Password:</label>
+							<input type="password" class="bg-blue-300 rounded-md h-[26px] py-1 px-2" />
+						</div>
+						<div class="flex flex-col">
+							<label>Confirm Password:</label>
+							<input type="password" class="bg-blue-300 rounded-md h-[26px] py-1 px-2" />
+						</div>
+						<div class="flex flex-col">
+							<button class="">Get started!</button>
+						</div>
+					</form>
 				</div>
 			</div>
-
-			<div>
-				<div>
+			<div class="flex justify-center items-center w-[40%] h-[100vh] bg-brand-300">
+				<div class="flex w-[60%] h-fit">
 					<img src="../../public/images/login-hero.png" alt="login-hero" />
 				</div>
 			</div>

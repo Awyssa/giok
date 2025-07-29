@@ -1,0 +1,6 @@
+{
+	"tabWidth": 1,
+	"useTabs": true,
+	"experimentalTernaries": true,
+	"printWidth": 120
+}

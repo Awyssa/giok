@@ -1,5 +1,5 @@
 # giok / 기억
-My learning app - powered by Bun, React, Elysia and Drizzle
+My learning app - powered by Bun, HTMX, React, Tailwind, Elysia and Drizzle
 
 To install dependencies:
 ```bash

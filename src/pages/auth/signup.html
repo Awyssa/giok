@@ -15,33 +15,48 @@
 	<body>
 		<div class="flex">
 			<div class="w-[60%]">
-				<div class="flex items-center h-[80px] px-8">
+				<div class="w-fit">
 					<a href="/">
-						<img src="../../public/images/logo.svg" alt="logo" class="h-[50px] w-[50px] mr-4" />
+						<div class="flex items-center h-[80px] px-8">
+							<img src="../../public/images/logo.svg" alt="logo" class="h-[50px] w-[50px] mr-4" />
+							<p class="text-2xl">Giok / 기억</p>
+						</div>
 					</a>
-					<p class="text-2xl">Giok / 기억</p>
 				</div>
 				<div class="h-[calc(100vh-80px)] flex flex-col items-center justify-center w-full">
 					<h1 class="text-2xl mb-4">Start your own Giok!</h1>
-					<form class="flex flex-col gap-4 w-[40%]" hx-post="/api/auth/signup" hx-indicator="#loading" hx-target="#results">
+					<form class="flex flex-col gap-4 w-[40%]" hx-post="/api/auth/signup" hx-target="#results">
 						<div class="flex flex-col gap-1">
 							<label>Full name:</label>
-							<input id="name" name="name" required type="text" class="brand-input" />
+							<input id="name" name="name" required type="text" class="brand-input" placeholder="Enter your full name" />
 						</div>
 						<div class="flex flex-col">
 							<label>Email:</label>
-							<input id="email" name="email" required type="email" class="brand-input" />
+							<input
+								id="email"
+								name="email"
+								required
+								type="email"
+								class="brand-input"
+								placeholder="Enter your email address"
+							/>
 						</div>
 						<div class="flex flex-col">
 							<label>Password:</label>
-							<input id="password" name="password" type="password" class="brand-input" />
+							<input id="password" name="password" type="password" class="brand-input" placeholder="Enter your password" />
 						</div>
 						<div class="flex flex-col">
 							<label>Confirm Password:</label>
-							<input id="confirm-password" name="confirm-password" type="password" class="brand-input" />
+							<input
+								id="confirm-password"
+								name="confirm-password"
+								type="password"
+								class="brand-input"
+								placeholder="Confirm your password"
+							/>
 						</div>
 						<div class="flex flex-col">
-							<button type="submit" class="brand-button">Get started!</button>
+							<button type="submit" class="brand-button mt-4">Get started!</button>
 						</div>
 					</form>
 					<div id="results" class="h-[28px] mt-2"></div>
@@ -49,7 +64,7 @@
 			</div>
 			<div class="flex justify-center items-center w-[40%] h-[100vh] bg-brand-300">
 				<div class="flex w-[60%] h-fit">
-					<img src="../../public/images/login-hero.png" alt="login-hero" />
+					<img src="../../public/images/signup-hero.png" alt="login-hero" />
 				</div>
 			</div>
 		</div>

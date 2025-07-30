@@ -13,13 +13,49 @@
 		></script>
 	</head>
 	<body>
-		<nav class="bg-brand-300 h-[80px] text-white px-8 flex justify-between">
-			<a href="/" class="flex justify-center items-center">
-				<img src="../../public/images/logo.svg" alt="logo" class="h-[50px] w-[50px] mr-4" />
-				<p class="text-2xl">Giok / 기억</p>
-			</a>
-		</nav>
-
-		<div>Page goes here</div>
+		<div class="flex">
+			<div class="w-[60%]">
+				<div class="w-fit">
+					<a href="/">
+						<div class="flex items-center h-[80px] px-8">
+							<img src="../../public/images/logo.svg" alt="logo" class="h-[50px] w-[50px] mr-4" />
+							<p class="text-2xl">Giok / 기억</p>
+						</div>
+					</a>
+				</div>
+				<div class="h-[calc(100vh-80px)] flex flex-col items-center justify-center w-full">
+					<h1 class="text-2xl mb-4">Welcome back!</h1>
+					<form class="flex flex-col gap-4 w-[40%]" hx-post="/api/auth/login" hx-target="#results">
+						<div class="flex flex-col">
+							<label>Email:</label>
+							<input
+								id="email"
+								name="email"
+								required
+								type="email"
+								class="brand-input"
+								placeholder="Enter your email address"
+							/>
+						</div>
+						<div class="flex flex-col">
+							<label>Password:</label>
+							<input id="password" name="password" type="password" class="brand-input" placeholder="Enter your password" />
+						</div>
+						<div class="flex flex-col">
+							<button type="submit" class="brand-button mt-4 flex justify-center">
+								Login
+								<img src="https://samherbert.net/svg-loaders/svg-loaders/tail-spin.svg" class="htmx-indicator pl-2 h-[26px]" />
+							</button>
+						</div>
+					</form>
+					<div id="results" class="h-[28px] mt-2"></div>
+				</div>
+			</div>
+			<div class="flex justify-center items-center w-[40%] h-[100vh] bg-brand-300">
+				<div class="flex w-[60%] h-fit">
+					<img src="../../public/images/signup-hero.png" alt="signup-hero" />
+				</div>
+			</div>
+		</div>
 	</body>
 </html>

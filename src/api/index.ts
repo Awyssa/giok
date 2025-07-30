@@ -1,8 +1,14 @@
-import { Elysia } from 'elysia'
+import { Elysia } from "elysia";
 
-const api = new Elysia()
-    .get('/api', () => 'Hello Elysia')
-    .get('/api/hello', () => ({ message: 'Hello from Elysia!', method: 'GET' }))
-    .post('/api/hello', () => ({ message: 'Hello from Elysia!', method: 'POST' }))
+import authRouter from "./routes/auth";
+
+const api = new Elysia({ prefix: "/api" })
+	.get("/", () => "Hello Elysia")
+	.use(authRouter)
+	.onError(({ code }) => {
+		if (code === "NOT_FOUND") {
+			return "Route not found :(";
+		}
+	});
 
 export default api;

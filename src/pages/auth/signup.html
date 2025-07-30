@@ -23,27 +23,28 @@
 				</div>
 				<div class="h-[calc(100vh-80px)] flex flex-col items-center justify-center w-full">
 					<h1 class="text-2xl mb-4">Start your own Giok!</h1>
-					<form class="flex flex-col gap-4 w-[40%]">
+					<form class="flex flex-col gap-4 w-[40%]" hx-post="/api/auth/signup" hx-indicator="#loading" hx-target="#results">
 						<div class="flex flex-col gap-1">
-							<label>Name:</label>
-							<input type="text" class="bg-blue-300 rounded-md h-[26px] py-1 px-2" />
+							<label>Full name:</label>
+							<input id="name" name="name" required type="text" class="brand-input" />
 						</div>
 						<div class="flex flex-col">
 							<label>Email:</label>
-							<input type="email" class="bg-blue-300 rounded-md h-[26px] py-1 px-2" />
+							<input id="email" name="email" required type="email" class="brand-input" />
 						</div>
 						<div class="flex flex-col">
 							<label>Password:</label>
-							<input type="password" class="bg-blue-300 rounded-md h-[26px] py-1 px-2" />
+							<input id="password" name="password" type="password" class="brand-input" />
 						</div>
 						<div class="flex flex-col">
 							<label>Confirm Password:</label>
-							<input type="password" class="bg-blue-300 rounded-md h-[26px] py-1 px-2" />
+							<input id="confirm-password" name="confirm-password" type="password" class="brand-input" />
 						</div>
 						<div class="flex flex-col">
-							<button class="text-center text-white bg-brand-300 rounded-md py-2 cursor-pointer mt-4">Get started!</button>
+							<button type="submit" class="brand-button">Get started!</button>
 						</div>
 					</form>
+					<div id="results" class="h-[28px] mt-2"></div>
 				</div>
 			</div>
 			<div class="flex justify-center items-center w-[40%] h-[100vh] bg-brand-300">

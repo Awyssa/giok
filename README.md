@@ -1,5 +1,5 @@
 # giok / 기억
-My learning app - powered by Bun, HTMX, React, Tailwind, Elysia, and Drizzle
+My learning app - powered by [Bun](https://bun.sh), [HTMX](https://htmx.org/), [React](https://react.dev/), [Tailwind](https://tailwindcss.com/), [Elysia](https://elysiajs.com/), and [Drizzle](https://orm.drizzle.team/)
 
 To install dependencies:
 ```bash
@@ -16,4 +16,4 @@ To run for production:
 bun start
 ```
 
-This project was created using `bun init` in bun v1.2.14. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+This project was created using `bun init` in bun v1.2.14.

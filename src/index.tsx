@@ -24,7 +24,10 @@ serve({
 		"/app/*": app,
 
 		// Single handler that delegates all API requests to Elysia
-		"/api": (req: Request) => api.handle(req),
+		"/api": (req: Request) => {
+			console.log("Incoming req:", req.url);
+			return api.handle(req);
+		},
 		"/api/*": (req: Request) => {
 			console.log("Incoming req:", req.url);
 			return api.handle(req);
@@ -40,6 +43,8 @@ serve({
 			}
 			return new Response("Not Found", { status: 404 });
 		},
+
+		// Serve CSS files
 		"/styles/*": async (req: Request) => {
 			const url = new URL(req.url);
 			const filePath = `./src/public${url.pathname}`;
@@ -55,8 +60,9 @@ serve({
 	},
 
 	development: process.env.NODE_ENV !== "production" && {
-		hmr: true,
+		hmr: true, // Hot loading
 		console: true,
 	},
-	port: 6969,
+
+	port: 6969, // Always keep it 69
 });

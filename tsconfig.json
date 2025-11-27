@@ -1,18 +1,23 @@
 {
-  "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "jsx": "react-jsx",
-    "allowJs": true,
-    "strict": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "baseUrl": ".",
-    "outDir": "./dist",
-    "paths": {
-      "@/*": ["./src/*"]
-    }
-  },
-  "exclude": ["dist", "node_modules"]
+	"compilerOptions": {
+		"target": "ESNext",
+		"module": "ESNext",
+		"moduleResolution": "bundler",
+		"jsx": "react-jsx",
+		"allowJs": true,
+		"strict": true,
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true,
+		"baseUrl": ".",
+		"outDir": "./dist",
+		"paths": {
+			"@/*": ["./src/*"],
+
+			"@/utils": ["./utils/*"],
+			"@/app": ["./app/*"],
+			"@/pages": ["./pages/*"],
+			"@/styles": ["./styles/*"]
+		}
+	},
+	"exclude": ["dist", "node_modules"]
 }

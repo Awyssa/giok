@@ -1,5 +1,6 @@
 import { Elysia } from "elysia";
 
+// Routes
 import authRouter from "./routes/auth";
 
 const api = new Elysia({ prefix: "/api" })

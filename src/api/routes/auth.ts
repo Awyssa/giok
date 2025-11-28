@@ -34,10 +34,8 @@ const authRouter = new Elysia({ prefix: "/auth" })
 		const validUser = User.safeParse({ name, email, password });
 
 		if (validUser.error) {
-			const errorMessages = validUser
-				.error!.issues.map((issue) => {
-					return `<p class="error-message">${issue.message}</p>`;
-				})
+			const errorMessages = validUser.error.issues
+				.map((issue) => `<p class="error-message">${issue.message}</p>`)
 				.join()
 				.replaceAll(",", "");
 
@@ -48,14 +46,22 @@ const authRouter = new Elysia({ prefix: "/auth" })
 
 		const hashedPassword = await Bun.password.hash(password);
 
-		await db.insert(users).values({
-			name: validUser.data.name,
-			email: validUser.data.email,
-			password: hashedPassword,
-		});
+		try {
+			await db.insert(users).values({
+				name: validUser.data.name,
+				email: validUser.data.email,
+				password: hashedPassword,
+			});
+		} catch (err: any) {
+			console.log("Error while trying to save new user to db", err);
+
+			if (err.code == "23505") return "<p>This user email already exists, please use another email address</p>";
+
+			return "<p>Cannot create this new user. Please try again</p>";
+		}
 
 		ctx.set.headers = { Cookie: "giok-tok: Your-secret-cookie-shhhhh" };
-		// ctx.set.headers = { "HX-Redirect": "/app" };
+		ctx.set.headers = { "HX-Redirect": "/app" };
 
 		return "<p>Signing you in!</p>";
 	})

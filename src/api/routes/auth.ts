@@ -3,11 +3,18 @@ import { log } from "@/utils/logger";
 import * as z from "zod";
 import { users } from "../drizzle/schema";
 
+interface User {
+	name: string;
+	email: string;
+	password: string;
+	confirmPassword: string;
+}
+
 const authRouter = new Elysia({ prefix: "/auth" })
-	.post("/signup", async (ctx) => {
+	.post("/signup", async (ctx: any) => {
 		const { db, body } = ctx;
 
-		const { name, email, password, confirmPassword } = body;
+		const { name, email, password, confirmPassword }: User = body;
 
 		if (password !== confirmPassword) return '<p class="error-message">Password and confirm password do not match!</p>';
 
@@ -44,26 +51,44 @@ const authRouter = new Elysia({ prefix: "/auth" })
 			return htmlErrorMessage;
 		}
 
+		// After successful user creation:
 		const hashedPassword = await Bun.password.hash(password);
 
 		try {
-			await db.insert(users).values({
-				name: validUser.data.name,
-				email: validUser.data.email,
-				password: hashedPassword,
+			const [newUser] = await db
+				.insert(users)
+				.values({
+					name: validUser.data.name,
+					email: validUser.data.email,
+					password: hashedPassword,
+				})
+				.returning(); // Get the created user back
+
+			// Generate JWT token with user data
+			const token = await jwt.sign({
+				id: newUser.id,
+				email: newUser.email,
+				name: newUser.name,
 			});
+
+			// Set the JWT as a cookie
+			setCookie("auth", token, {
+				httpOnly: true,
+				maxAge: 7 * 24 * 60 * 60, // 7 days
+				path: "/",
+				sameSite: "lax",
+				secure: process.env.NODE_ENV === "production",
+			});
+
+			ctx.set.headers = { "HX-Redirect": "/app" };
+			return "<p>Signing you in!</p>";
 		} catch (err: any) {
 			console.log("Error while trying to save new user to db", err);
 
-			if (err.code == "23505") return "<p>This user email already exists, please use another email address</p>";
+			if (err.code == "23505") return "<p>This user email already exists</p>";
 
 			return "<p>Cannot create this new user. Please try again</p>";
 		}
-
-		ctx.set.headers = { Cookie: "giok-tok: Your-secret-cookie-shhhhh" };
-		ctx.set.headers = { "HX-Redirect": "/app" };
-
-		return "<p>Signing you in!</p>";
 	})
 	.post("/login", (ctx: any) => {
 		ctx.set.headers = { Cookie: "Your-secret-cookie-shhhhh" };
@@ -84,6 +109,9 @@ const authRouter = new Elysia({ prefix: "/auth" })
 			success: true,
 			user: { id: 1 },
 		};
+	})
+	.get("/auth", async (ctx) => {
+		const isLoggedIn = db.return;
 	});
 
 export default authRouter;

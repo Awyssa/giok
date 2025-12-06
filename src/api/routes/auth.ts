@@ -2,6 +2,7 @@ import { Elysia } from "elysia";
 import { log } from "@/utils/logger";
 import * as z from "zod";
 import { users } from "../drizzle/schema";
+import jwt from "jsonwebtoken";
 
 interface User {
 	name: string;
@@ -51,10 +52,9 @@ const authRouter = new Elysia({ prefix: "/auth" })
 			return htmlErrorMessage;
 		}
 
-		// After successful user creation:
-		const hashedPassword = await Bun.password.hash(password);
-
 		try {
+			const hashedPassword = await Bun.password.hash(password);
+
 			const [newUser] = await db
 				.insert(users)
 				.values({
@@ -62,32 +62,20 @@ const authRouter = new Elysia({ prefix: "/auth" })
 					email: validUser.data.email,
 					password: hashedPassword,
 				})
-				.returning(); // Get the created user back
+				.returning();
 
-			// Generate JWT token with user data
-			const token = await jwt.sign({
-				id: newUser.id,
-				email: newUser.email,
-				name: newUser.name,
-			});
+			const token = await jwt.sign({ userId: newUser.id, email: newUser.email }, process.env.JWT_SECRET, { expiresIn: "7d" });
 
-			// Set the JWT as a cookie
-			setCookie("auth", token, {
-				httpOnly: true,
-				maxAge: 7 * 24 * 60 * 60, // 7 days
-				path: "/",
-				sameSite: "lax",
-				secure: process.env.NODE_ENV === "production",
-			});
+			ctx.set.headers["HX-Redirect"] = "/app";
+			ctx.set.headers["Set-Cookie"] = `giok-token=${token}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=${60 * 60 * 24 * 7}`;
 
-			ctx.set.headers = { "HX-Redirect": "/app" };
 			return "<p>Signing you in!</p>";
 		} catch (err: any) {
-			console.log("Error while trying to save new user to db", err);
+			if (err.cause?.code === "23505") {
+				return `<p class="error-message">This email address is already in use, </br> Please login or use another email address.`;
+			}
 
-			if (err.code == "23505") return "<p>This user email already exists</p>";
-
-			return "<p>Cannot create this new user. Please try again</p>";
+			return "<p>Cannot create this new user. Please try again or contact support.</p>";
 		}
 	})
 	.post("/login", (ctx: any) => {
@@ -111,7 +99,9 @@ const authRouter = new Elysia({ prefix: "/auth" })
 		};
 	})
 	.get("/auth", async (ctx) => {
-		const isLoggedIn = db.return;
+		console.log("ctx ===", ctx);
+
+		return true;
 	});
 
 export default authRouter;

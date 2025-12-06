@@ -14,7 +14,7 @@
 	</head>
 	<body>
 		<!-- Navbar -->
-		<header hx-get="/auth" hx-trigger="load">
+		<header hx-get="/api/auth/auth" hx-trigger="load" hx-headers='{"credentials": "include"}'>
 			<nav class="bg-brand-300 h-[80px] text-white px-8 flex justify-between">
 				<a href="/" class="flex justify-center items-center">
 					<img src="../public/images/logo.svg" alt="logo" class="h-[50px] w-[50px] mr-4" />

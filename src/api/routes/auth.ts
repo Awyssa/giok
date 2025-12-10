@@ -27,12 +27,12 @@ const authRouter = new Elysia({ prefix: "/auth" })
 			email: z.string().email("Invalid email address"),
 			password: z
 				.string()
-				.min(8, "Password must be at least 8 characters")
-				.max(64, "Password is too long")
-				.regex(/[a-z]/, "Password must contain at least one lowercase letter")
-				.regex(/[A-Z]/, "Password must contain at least one uppercase letter")
-				.regex(/\d/, "Password must contain at least one number")
-				.regex(/[@$!%*?&]/, "Password must contain at least one special character")
+				// .min(8, "Password must be at least 8 characters")
+				// .max(64, "Password is too long")
+				// .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+				// .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+				// .regex(/\d/, "Password must contain at least one number")
+				// .regex(/[@$!%*?&]/, "Password must contain at least one special character")
 				.trim(),
 		});
 
@@ -76,25 +76,28 @@ const authRouter = new Elysia({ prefix: "/auth" })
 		}
 	})
 	.post("/login", async ({ body, db, jwt, set }: any) => {
-		const hashedPassword = await Bun.password.hash(body.password);
+		try {
+			const userRows = await db.select().from(users).where(eq(users.email, body.email));
 
-		const profile = await db
-			.select({
-				id: users.id,
-				name: users.name,
-				email: users.email,
-				createdAt: users.createdAt,
-			})
-			.from(users)
-			.where(eq(users.email, body.email))
-			.where(eq(users.password, hashedPassword));
+			if (!userRows?.length) return `<p class="error-message">Email or password is not correct, please try again</p>`;
 
-		const token = await jwt.sign({ userId: profile.id, email: profile.email }, process.env.JWT_SECRET, { expiresIn: "1m" });
+			const profile = userRows[0];
 
-		set.headers["HX-Redirect"] = "/app";
-		set.headers["Set-Cookie"] = `giokToken=${token}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=${60 * 60 * 24 * 7}`;
+			const isMatch = await Bun.password.verify(body.password, profile.password);
 
-		return profile;
+			if (!isMatch) return `<p class="error-message">Email or password is not correct, please try again</p>`;
+
+			const token = await jwt.sign({ userId: profile.id, email: profile.email }, process.env.JWT_SECRET, { expiresIn: "1m" });
+
+			set.headers["HX-Redirect"] = "/app";
+			set.headers["Set-Cookie"] = `giokToken=${token}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=${60 * 60 * 24 * 7}`;
+
+			return "<p>Signing you in!</p>";
+		} catch (err) {
+			console.log("error ===", err);
+
+			return `<p class="error-message">Cannot sign you in, please try again or contact support</p>`;
+		}
 	})
 	.get("/logout", ({ set }: any) => {
 		set.headers["Set-Cookie"] = `giokToken=""; HttpOnly; Secure; SameSite=Strict; Path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;

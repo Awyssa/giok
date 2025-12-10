@@ -25,11 +25,13 @@ const api = new Elysia({ prefix: "/api" })
 			secret: process.env.JWT_SECRET!,
 		})
 	)
-	.derive(async ({ db, jwt, cookie: { giokToken } }) => {
+	.derive(async ({ db, jwt, cookie: { giokToken } }: any) => {
 		try {
+			if (!giokToken) return null;
+
 			const auth: any = await jwt.verify(giokToken.value);
 
-			const [profile] = await db
+			const profile = await db
 				.select({
 					id: users.id,
 					name: users.name,
@@ -39,10 +41,12 @@ const api = new Elysia({ prefix: "/api" })
 				.from(users)
 				.where(eq(users.email, auth.email));
 
-			return { user: profile || null };
+			if (!profile?.length) return null;
+
+			return { user: profile[0] };
 		} catch (err) {
 			log.error("err", err);
-			return { user: null };
+			return null;
 		}
 	})
 	.get("/", () => "Hello Elysia!!!")

@@ -1,6 +1,7 @@
 import { Elysia } from "elysia";
 
 const htmxRouter = new Elysia({ prefix: "/htmx" }).get("/nav-buttons", async ({ user }: any) => {
+	console.log("user", user);
 	if (user) {
 		return `
 			<div class="flex items-center gap-8">

@@ -16,7 +16,6 @@ const authRouter = new Elysia({ prefix: "/auth" })
 
 		if (password !== confirmPassword) return '<p class="error-message">Password and confirm password do not match!</p>';
 
-		// Checking schema
 		const User = z.object({
 			name: z
 				.string()
@@ -27,12 +26,12 @@ const authRouter = new Elysia({ prefix: "/auth" })
 			email: z.string().email("Invalid email address"),
 			password: z
 				.string()
-				// .min(8, "Password must be at least 8 characters")
-				// .max(64, "Password is too long")
-				// .regex(/[a-z]/, "Password must contain at least one lowercase letter")
-				// .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
-				// .regex(/\d/, "Password must contain at least one number")
-				// .regex(/[@$!%*?&]/, "Password must contain at least one special character")
+				.min(8, "Password must be at least 8 characters")
+				.max(64, "Password is too long")
+				.regex(/[a-z]/, "Password must contain at least one lowercase letter")
+				.regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+				.regex(/\d/, "Password must contain at least one number")
+				.regex(/[@$!%*?&]/, "Password must contain at least one special character")
 				.trim(),
 		});
 

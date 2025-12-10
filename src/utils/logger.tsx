@@ -1,6 +1,4 @@
-interface LoggerFn {
-	(message: string, data?: unknown): void;
-}
+type LoggerFn = (message: string, data?: any) => void;
 
 interface Logger {
 	info: LoggerFn;

@@ -14,20 +14,13 @@
 	</head>
 	<body>
 		<!-- Navbar -->
-		<header hx-get="/api/auth/auth" hx-trigger="load" hx-headers='{"credentials": "include"}'>
-			<nav class="bg-brand-300 h-[80px] text-white px-8 flex justify-between">
+		<header>
+			<nav class="bg-brand-300 h-[80px] text-white px-8 flex justify-between items-center">
 				<a href="/" class="flex justify-center items-center">
 					<img src="../public/images/logo.svg" alt="logo" class="h-[50px] w-[50px] mr-4" />
 					<p class="text-2xl">Giok / 기억</p>
 				</a>
-				<div class="flex items-center gap-8">
-					<button class="cursor-pointer">
-						<a href="/login"> Login </a>
-					</button>
-					<button class="cursor-pointer bg-white text-black py-2 px-4 rounded-xl">
-						<a href="/signup"> Get started </a>
-					</button>
-				</div>
+				<div id="nav-buttons" hx-get="/api/htmx/nav-buttons" hx-trigger="load" hx-swap="innerHTML"></div>
 			</nav>
 		</header>
 

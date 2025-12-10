@@ -11,7 +11,7 @@ const toCamelCase = (str: string): string => {
 };
 
 // Helper function to parse a value into appropriate type
-const parseValue = (value: string): any => {
+const parseValue = (value: string) => {
 	// Handle true/false strings
 	if (value === "true") return true;
 	if (value === "false") return false;

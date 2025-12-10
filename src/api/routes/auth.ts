@@ -1,8 +1,7 @@
 import { Elysia } from "elysia";
-import { log } from "@/utils/logger";
 import * as z from "zod";
 import { users } from "../drizzle/schema";
-import jwt from "jsonwebtoken";
+import { eq } from "drizzle-orm";
 
 interface User {
 	name: string;
@@ -12,9 +11,7 @@ interface User {
 }
 
 const authRouter = new Elysia({ prefix: "/auth" })
-	.post("/signup", async (ctx: any) => {
-		const { db, body } = ctx;
-
+	.post("/signup", async ({ body, db, jwt, set }: any) => {
 		const { name, email, password, confirmPassword }: User = body;
 
 		if (password !== confirmPassword) return '<p class="error-message">Password and confirm password do not match!</p>';
@@ -64,10 +61,10 @@ const authRouter = new Elysia({ prefix: "/auth" })
 				})
 				.returning();
 
-			const token = await jwt.sign({ userId: newUser.id, email: newUser.email }, process.env.JWT_SECRET, { expiresIn: "7d" });
+			const token = await jwt.sign({ userId: newUser.id, email: newUser.email }, process.env.JWT_SECRET, { expiresIn: "1m" });
 
-			ctx.set.headers["HX-Redirect"] = "/app";
-			ctx.set.headers["Set-Cookie"] = `giok-token=${token}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=${60 * 60 * 24 * 7}`;
+			set.headers["HX-Redirect"] = "/app";
+			set.headers["Set-Cookie"] = `giokToken=${token}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=${60 * 60 * 24 * 7}`;
 
 			return "<p>Signing you in!</p>";
 		} catch (err: any) {
@@ -78,30 +75,31 @@ const authRouter = new Elysia({ prefix: "/auth" })
 			return "<p>Cannot create this new user. Please try again or contact support.</p>";
 		}
 	})
-	.post("/login", (ctx: any) => {
-		ctx.set.headers = { Cookie: "Your-secret-cookie-shhhhh" };
-		ctx.set.headers = { "HX-Redirect": "/app" };
+	.post("/login", async ({ body, db, jwt, set }: any) => {
+		const hashedPassword = await Bun.password.hash(body.password);
 
-		return {
-			success: true,
-			user: { id: 1 },
-		};
+		const profile = await db
+			.select({
+				id: users.id,
+				name: users.name,
+				email: users.email,
+				createdAt: users.createdAt,
+			})
+			.from(users)
+			.where(eq(users.email, body.email))
+			.where(eq(users.password, hashedPassword));
+
+		const token = await jwt.sign({ userId: profile.id, email: profile.email }, process.env.JWT_SECRET, { expiresIn: "1m" });
+
+		set.headers["HX-Redirect"] = "/app";
+		set.headers["Set-Cookie"] = `giokToken=${token}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=${60 * 60 * 24 * 7}`;
+
+		return profile;
 	})
-	.post("/logout", (ctx: any) => {
-		ctx.set.headers = { Cookie: "" };
-		ctx.set.headers = { "HX-Redirect": "/" };
-
-		log.info("Logging out");
-
-		return {
-			success: true,
-			user: { id: 1 },
-		};
-	})
-	.get("/auth", async (ctx) => {
-		console.log("ctx ===", ctx);
-
-		return true;
+	.get("/logout", ({ set }: any) => {
+		set.headers["Set-Cookie"] = `giokToken=""; HttpOnly; Secure; SameSite=Strict; Path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+		set.headers["HX-Redirect"] = "/";
+		return null;
 	});
 
 export default authRouter;

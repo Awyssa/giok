@@ -3,15 +3,11 @@ import * as z from "zod";
 import { users } from "../drizzle/schema";
 import { eq } from "drizzle-orm";
 
-import type { User } from "@/types/schema";
-
-export interface UserSignUp extends User {
-	confirmPassword: string;
-}
+import type { AppContext, SignupBody, LoginBody } from "./auth.types";
 
 const authRouter = new Elysia({ prefix: "/auth" })
-	.post("/signup", async ({ body, db, jwt, set }: any) => {
-		const { name, email, password, confirmPassword }: UserSignUp = body;
+	.post("/signup", async ({ body, db, jwt, set }: AppContext & { body: SignupBody }) => {
+		const { name, email, password, confirmPassword }: SignupBody = body;
 
 		if (password !== confirmPassword) return '<p class="error-message">Password and confirm password do not match!</p>';
 
@@ -73,7 +69,7 @@ const authRouter = new Elysia({ prefix: "/auth" })
 			return "<p>Cannot create this new user. Please try again or contact support.</p>";
 		}
 	})
-	.post("/login", async ({ body, db, jwt, set }: any) => {
+	.post("/login", async ({ body, db, jwt, set }: AppContext & { body: LoginBody }) => {
 		try {
 			const userRows = await db.select().from(users).where(eq(users.email, body.email));
 
@@ -97,9 +93,10 @@ const authRouter = new Elysia({ prefix: "/auth" })
 			return `<p class="error-message">Cannot sign you in, please try again or contact support</p>`;
 		}
 	})
-	.get("/logout", ({ set }: any) => {
+	.get("/logout", ({ set }: AppContext) => {
 		set.headers["Set-Cookie"] = `giokToken=""; HttpOnly; Secure; SameSite=Strict; Path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
 		set.headers["HX-Redirect"] = "/";
+
 		return null;
 	});
 

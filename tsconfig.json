@@ -11,12 +11,7 @@
 		"baseUrl": ".",
 		"outDir": "./dist",
 		"paths": {
-			"@/*": ["./src/*"],
-
-			"@/utils": ["./utils/*"],
-			"@/app": ["./app/*"],
-			"@/pages": ["./pages/*"],
-			"@/styles": ["./styles/*"]
+			"@/*": ["./src/*"]
 		}
 	},
 	"exclude": ["dist", "node_modules"]

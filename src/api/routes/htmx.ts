@@ -1,18 +1,15 @@
 import { Elysia } from "elysia";
 
 const htmxRouter = new Elysia({ prefix: "/htmx" }).get("/nav-buttons", async ({ user }: any) => {
-	console.log("user", user);
 	if (user) {
 		return `
 			<div class="flex items-center gap-8">
       <span>Welcome, ${user.name}</span>
-      	<button 
-					class="cursor-pointer bg-white text-black py-2 px-4 rounded-xl" 
-					hx-get="/api/auth/logout" 
-					hx-trigger="click"
-				>
-        	Logout
-      	</button>
+			<button class="cursor-pointer bg-white text-black py-2 px-4 rounded-xl">
+			<a href="/app">
+			Dashboard
+			</a>
+			</button>
     	</div>`;
 	}
 

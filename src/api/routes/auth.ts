@@ -3,16 +3,15 @@ import * as z from "zod";
 import { users } from "../drizzle/schema";
 import { eq } from "drizzle-orm";
 
-interface User {
-	name: string;
-	email: string;
-	password: string;
+import type { User } from "@/types/schema";
+
+export interface UserSignUp extends User {
 	confirmPassword: string;
 }
 
 const authRouter = new Elysia({ prefix: "/auth" })
 	.post("/signup", async ({ body, db, jwt, set }: any) => {
-		const { name, email, password, confirmPassword }: User = body;
+		const { name, email, password, confirmPassword }: UserSignUp = body;
 
 		if (password !== confirmPassword) return '<p class="error-message">Password and confirm password do not match!</p>';
 

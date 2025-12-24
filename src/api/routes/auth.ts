@@ -55,7 +55,7 @@ const authRouter = new Elysia({ prefix: "/auth" })
 				})
 				.returning();
 
-			const token = await jwt.sign({ userId: newUser.id, email: newUser.email }, process.env.JWT_SECRET, { expiresIn: "1m" });
+			const token = await jwt.sign({ userId: newUser.id, email: newUser.email });
 
 			set.headers["HX-Redirect"] = "/app";
 			set.headers["Set-Cookie"] = `giokToken=${token}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=${60 * 60 * 24 * 7}`;

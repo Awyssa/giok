@@ -1,6 +1,6 @@
-import type { AppContext } from "@/types/context";
+import type { RouterContext } from "@/types/api/router";
 
-export type { AppContext };
+export type { RouterContext };
 
 export interface SignupBody {
 	email: string;

@@ -25,11 +25,11 @@ const api = new Elysia({ prefix: "/api" })
 			secret: process.env.JWT_SECRET!,
 		})
 	)
-	.derive(async ({ db, jwt, cookie: { giokToken } }: any) => {
+	.derive(async ({ db, jwt, cookie: { giokToken } }) => {
 		try {
 			if (!giokToken) return;
 
-			const auth: any = await jwt.verify(giokToken.value);
+			const auth = await jwt.verify(giokToken.value);
 
 			const profile = await db
 				.select({

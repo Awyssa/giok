@@ -1,10 +1,9 @@
 import "../styles/index.css";
-import { Homepage } from "./pages/Homepage";
+import { RouterProvider } from "@tanstack/react-router";
+import { router } from "./router";
 
 export function App() {
-  return (
-    <Homepage />
-  );
+	return <RouterProvider router={router} />;
 }
 
 export default App;

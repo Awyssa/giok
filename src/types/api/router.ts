@@ -8,14 +8,23 @@ export interface JWTPayload extends JWTPayloadSpec {
 	email: string;
 }
 
-export interface AppContext {
+interface GiokToken {
+	value: string;
+}
+
+interface GiokCookie {
+	giokToken: GiokToken;
+}
+
+export interface RouterContext {
 	db: Database;
 	jwt: {
-		sign: (payload: JWTPayload) => Promise<string>;
-		verify: (token: string) => Promise<JWTPayload | false>;
+		sign?: (payload: JWTPayload) => Promise<string>;
+		verify?: (token: string) => Promise<JWTPayload | false>;
 	};
 	set: {
-		status?: number;
+		status: number;
 		headers: Record<string, string>;
 	};
+	cookie: GiokCookie;
 }

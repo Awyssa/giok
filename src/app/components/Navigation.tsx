@@ -1,8 +1,28 @@
 import { Home, Inbox, BarChart2, Settings } from "react-feather";
 
-const Navigation = () => {
+const NavigationButton = ({ icon, text, handleOnClick }) => {
 	return (
-		<nav className="bg-brand-300 h-[100vh] w-[20%] text-white p-8">
+		<div className="border-b-2 border-white flex gap-2 pb-1">
+			<button onClick={handleOnClick}>
+				{icon}
+				<p>{text}</p>
+			</button>
+		</div>
+	);
+};
+
+const Navigation = () => {
+
+	const navigationConfig = [
+		{
+			icon: <Home />,
+			text: "Home",
+			handleOnClick: () => 
+		}
+	]
+
+	return (
+		<nav className="bg-brand-300 h-[100vh] w-[20%] min-w-[240px] text-white p-8">
 			<a href="/app" className="flex justify-center items-center">
 				<img src="/images/logo.svg" alt="logo" className="h-[50px] w-[50px] mr-4" />
 				<p className="text-2xl">Giok / 기억</p>

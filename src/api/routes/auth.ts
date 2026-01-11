@@ -3,10 +3,10 @@ import * as z from "zod";
 import { users } from "../drizzle/schema";
 import { eq } from "drizzle-orm";
 
-import type { AppContext, SignupBody, LoginBody } from "./auth.types";
+import type { SignupBody, LoginBody } from "./auth.types";
 
 const authRouter = new Elysia({ prefix: "/auth" })
-	.post("/signup", async ({ body, db, jwt, set }: AppContext & { body: SignupBody }) => {
+	.post("/signup", async ({ body, db, jwt, set }) => {
 		const { name, email, password, confirmPassword }: SignupBody = body;
 
 		if (password !== confirmPassword) return '<p class="error-message">Password and confirm password do not match!</p>';
@@ -55,7 +55,7 @@ const authRouter = new Elysia({ prefix: "/auth" })
 				})
 				.returning();
 
-			const token = await jwt.sign({ userId: newUser.id, email: newUser.email });
+			const token = await jwt.sign({ userId: String(newUser.id), email: newUser.email });
 
 			set.headers["HX-Redirect"] = "/app";
 			set.headers["Set-Cookie"] = `giokToken=${token}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=${60 * 60 * 24 * 7}`;

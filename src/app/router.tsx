@@ -1,17 +1,5 @@
-import { createRootRoute, createRoute, createRouter, Outlet } from "@tanstack/react-router";
-import { Homepage } from "./pages/Homepage";
-
-const rootRoute = createRootRoute({
-	component: () => <Outlet />,
-});
-
-const indexRoute = createRoute({
-	getParentRoute: () => rootRoute,
-	path: "/",
-	component: Homepage,
-});
-
-const routeTree = rootRoute.addChildren([indexRoute]);
+import { createRouter } from "@tanstack/react-router";
+import { routeTree } from "./routeTree.gen";
 
 export const router = createRouter({
 	routeTree,

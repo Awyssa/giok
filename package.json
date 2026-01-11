@@ -6,9 +6,10 @@
 	"main": "src/index.tsx",
 	"module": "src/index.tsx",
 	"scripts": {
-		"dev": "bun --hot --no-clear-screen src/index.tsx",
-		"start": "NODE_ENV=production bun src/index.tsx",
-		"build": "bun run build.ts"
+		"router:generate": "bun scripts/generate-routes.ts",
+		"dev": "bun run router:generate && bun --hot --no-clear-screen src/index.tsx",
+		"start": "bun run router:generate && NODE_ENV=production bun src/index.tsx",
+		"build": "bun run router:generate && bun run build.ts"
 	},
 	"dependencies": {
 		"@elysiajs/cors": "^1.4.0",

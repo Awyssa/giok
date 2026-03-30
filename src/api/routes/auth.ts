@@ -69,7 +69,7 @@ const authRouter = new Elysia({ prefix: "/auth" })
 			return "<p>Cannot create this new user. Please try again or contact support.</p>";
 		}
 	})
-	.post("/login", async ({ body, db, jwt, set }: AppContext & { body: LoginBody }) => {
+	.post("/login", async ({ body, db, jwt, set }) => {
 		try {
 			const userRows = await db.select().from(users).where(eq(users.email, body.email));
 
@@ -93,7 +93,7 @@ const authRouter = new Elysia({ prefix: "/auth" })
 			return `<p class="error-message">Cannot sign you in, please try again or contact support</p>`;
 		}
 	})
-	.get("/logout", ({ set }: AppContext) => {
+	.get("/logout", ({ set }) => {
 		set.headers["Set-Cookie"] = `giokToken=""; HttpOnly; Secure; SameSite=Strict; Path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
 		set.headers["HX-Redirect"] = "/";
 
